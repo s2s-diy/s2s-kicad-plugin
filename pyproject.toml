@@ -1,0 +1,22 @@
+[project]
+name = "s2s-kicad-plugin"
+version = "0.1.0"
+description = "Import a circuit image into KiCad as an editable schematic, via S2S."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+# Runtime uses only the Python stdlib (KiCad ships without third-party
+# packages), so there are no install dependencies. Dev extras are for
+# running the test suite outside KiCad.
+dependencies = []
+
+[project.urls]
+Homepage = "https://s2s.diy"
+Documentation = "https://s2s.diy/docs/kicad-plugin/"
+Repository = "https://github.com/s2s-diy/s2s-kicad-plugin"
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
