@@ -36,19 +36,32 @@ network layer pure makes it unit-testable outside KiCad.
 
 ## Install
 
-### Via KiCad (once published)
+### Recommended: Install from File (works today)
 
-KiCad → **Plugin & Content Manager** → search "Import Circuit Image" →
-Install. (Submission in progress — see [`packaging/SUBMITTING.md`](packaging/SUBMITTING.md).)
+1. Download the latest `s2s-kicad-plugin-*.zip` from
+   [Releases](https://github.com/s2s-diy/s2s-kicad-plugin/releases).
+2. KiCad main window → **Tools → Plugin and Content Manager**.
+3. Click **Install from File…** (bottom of the window), pick the zip,
+   then **Apply Pending Changes**.
 
-### Manual (works today)
+A one-click listing in KiCad's official repository is in progress — see
+[`packaging/SUBMITTING.md`](packaging/SUBMITTING.md).
 
-Copy or symlink `s2s_kicad/` into your KiCad 3rd-party plugin directory,
-then restart KiCad (or use *Tools → External Plugins → Refresh*):
+### Advanced: manual copy
+
+Copy or symlink `s2s_kicad/` into your KiCad 3rd-party plugin directory:
 
 - macOS: `~/Documents/KiCad/<ver>/3rdparty/plugins/`
 - Linux: `~/.local/share/kicad/<ver>/3rdparty/plugins/`
 - Windows: `%USERPROFILE%\Documents\KiCad\<ver>\3rdparty\plugins\`
+
+### Run it — the plugin lives in the PCB Editor
+
+It's a **PCB Editor (pcbnew)** action plugin, not a project-manager or
+Schematic Editor one. Open the **PCB Editor**, then find **Import Circuit
+Image into KiCad** on the toolbar or under **Tools → External Plugins**.
+If it doesn't appear, run **Tools → External Plugins → Refresh Plugins**
+(no restart needed).
 
 Point the plugin at a non-default backend with the `S2S_PLUGIN_BASE_URL`
 environment variable (e.g. `http://localhost:8080` for a local S2S).
