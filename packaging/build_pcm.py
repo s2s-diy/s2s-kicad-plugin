@@ -28,11 +28,15 @@ BUILD = os.path.join(HERE, "build")
 DIST = os.path.join(ROOT, "dist")
 
 IDENTIFIER = "com.s2s.kicad.import-circuit-image"
-VERSION = "0.1.0"
+VERSION = "0.1.1"
 KICAD_VERSION = "7.0"
 
 # Files copied into the package's plugins/ directory (the action plugin).
 PLUGIN_FILES = ["__init__.py", "action.py", "s2s_client.py"]
+
+# Resource files shipped alongside the plugin (icon + CA bundle for TLS
+# inside KiCad's cert-less Python).
+RESOURCE_FILES = ["icon.png", "cacert.pem"]
 
 # The packaged metadata.json — a single version with NO download_* fields.
 # The repo-submission metadata (printed at the end) adds those.
@@ -85,18 +89,24 @@ def build() -> None:
     _reset(BUILD)
     os.makedirs(DIST, exist_ok=True)
 
-    # plugins/ — the action plugin code + a copy of the icon for the toolbar
+    # plugins/ — the action plugin code + its resources (icon + CA bundle)
     plugins_dir = os.path.join(BUILD, "plugins")
     os.makedirs(os.path.join(plugins_dir, "resources"))
     for name in PLUGIN_FILES:
         shutil.copy2(os.path.join(SRC, name), os.path.join(plugins_dir, name))
-    icon_src = os.path.join(SRC, "resources", "icon.png")
-    shutil.copy2(icon_src, os.path.join(plugins_dir, "resources", "icon.png"))
+    for name in RESOURCE_FILES:
+        shutil.copy2(
+            os.path.join(SRC, "resources", name),
+            os.path.join(plugins_dir, "resources", name),
+        )
 
     # resources/icon.png — shown in the Content Manager
     res_dir = os.path.join(BUILD, "resources")
     os.makedirs(res_dir)
-    shutil.copy2(icon_src, os.path.join(res_dir, "icon.png"))
+    shutil.copy2(
+        os.path.join(SRC, "resources", "icon.png"),
+        os.path.join(res_dir, "icon.png"),
+    )
 
     # metadata.json at the package root
     with open(os.path.join(BUILD, "metadata.json"), "w", encoding="utf-8") as fh:

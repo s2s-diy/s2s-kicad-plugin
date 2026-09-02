@@ -17,8 +17,8 @@ the ``.kicad_sch`` text.
 from __future__ import annotations
 
 import json
-import mimetypes
 import os
+import ssl
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -28,6 +28,32 @@ from urllib import request as urlrequest
 from urllib.error import HTTPError, URLError
 
 DEFAULT_BASE_URL = "https://s2s.diy"
+
+# KiCad's bundled Python on macOS ships without a usable CA store, so the
+# default SSL context can't verify s2s.diy's (valid) certificate and every
+# request dies with CERTIFICATE_VERIFY_FAILED. We ship a CA bundle with the
+# plugin and verify against it. certifi (if the host Python has it) wins;
+# then our bundled pem; then the system default as a last resort.
+_BUNDLED_CACERT = os.path.join(os.path.dirname(__file__), "resources", "cacert.pem")
+
+# Cloudflare blocks urllib's default ``Python-urllib/x.y`` User-Agent with a
+# 403 before the request ever reaches S2S, so we send our own.
+_USER_AGENT = "s2s-kicad-plugin/0.1.1"
+
+
+def _build_ssl_context() -> ssl.SSLContext:
+    try:
+        import certifi  # type: ignore
+
+        return ssl.create_default_context(cafile=certifi.where())
+    except Exception:  # noqa: BLE001 — certifi is optional
+        pass
+    if os.path.exists(_BUNDLED_CACERT):
+        try:
+            return ssl.create_default_context(cafile=_BUNDLED_CACERT)
+        except Exception:  # noqa: BLE001 — fall through to system default
+            pass
+    return ssl.create_default_context()
 
 # Poll cadence for the async ingestion job. The VLM pipeline typically
 # lands in 15–60s; cap the wait so a wedged job surfaces as an error
@@ -57,7 +83,12 @@ class S2SClient:
     def __post_init__(self) -> None:
         self.base_url = self.base_url.rstrip("/")
         # Cookie jar kept only to follow benign redirects; auth is header-based.
-        self._opener = urlrequest.build_opener(urlrequest.HTTPCookieProcessor(CookieJar()))
+        # HTTPSHandler carries our CA bundle so verification works inside
+        # KiCad's cert-less Python.
+        self._opener = urlrequest.build_opener(
+            urlrequest.HTTPCookieProcessor(CookieJar()),
+            urlrequest.HTTPSHandler(context=_build_ssl_context()),
+        )
 
     # ---- auth -----------------------------------------------------------
 
@@ -180,7 +211,7 @@ class S2SClient:
         content_type: Optional[str] = None,
     ) -> dict:
         url = f"{self.base_url}{path}"
-        headers = {"Accept": "application/json"}
+        headers = {"Accept": "application/json", "User-Agent": _USER_AGENT}
         if self.api_key:
             headers["X-S2S-Key"] = self.api_key
 

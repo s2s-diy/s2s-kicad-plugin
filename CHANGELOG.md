@@ -1,6 +1,16 @@
 # Changelog
 
-## 0.1.0 (unreleased)
+## 0.1.1
+
+- Fix `SSL: CERTIFICATE_VERIFY_FAILED` on macOS: KiCad's bundled Python
+  has no usable CA store, so the client now ships a CA bundle
+  (`resources/cacert.pem`) and verifies against it (certifi is used
+  instead when the host Python provides it).
+- Fix a Cloudflare `403` before requests reach S2S: send an explicit
+  `User-Agent` instead of the default `Python-urllib`, which Cloudflare
+  blocks.
+
+## 0.1.0
 
 Initial release.
 

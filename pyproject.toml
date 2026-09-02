@@ -1,6 +1,6 @@
 [project]
 name = "s2s-kicad-plugin"
-version = "0.1.0"
+version = "0.1.1"
 description = "Import a circuit image into KiCad as an editable schematic, via S2S."
 readme = "README.md"
 license = { text = "MIT" }
