@@ -1,0 +1,43 @@
+{
+    "$schema": "https://go.kicad.org/pcm/schemas/v1",
+    "name": "Import Circuit Image into KiCad",
+    "description": "Turn a photo, screenshot, scan, or hand-drawn sketch of a circuit into an editable KiCad schematic.",
+    "description_full": "Pick a circuit image (PNG, JPG, or WebP) and this plugin converts it into an editable .kicad_sch schematic using S2S (sketch-to-schematic). The generated schematic opens in KiCad, where you can keep editing; you can also continue online at s2s.diy to run electrical checks and simulate the circuit. The plugin authenticates with a personal API token generated in the S2S web app. It runs from the PCB Editor (Tools -> External Plugins).",
+    "identifier": "com.s2s.kicad.import-circuit-image",
+    "type": "plugin",
+    "author": {
+        "name": "S2S",
+        "contact": {
+            "web": "https://s2s.diy"
+        }
+    },
+    "license": "MIT",
+    "resources": {
+        "Website": "https://s2s.diy",
+        "Documentation": "https://s2s.diy/docs/kicad-plugin/",
+        "GitHub": "https://github.com/s2s-diy/s2s-kicad-plugin"
+    },
+    "tags": [
+        "import",
+        "schematic",
+        "conversion",
+        "ai",
+        "ocr"
+    ],
+    "versions": [
+        {
+            "version": "0.1.1",
+            "status": "development",
+            "kicad_version": "7.0",
+            "download_url": "https://github.com/s2s-diy/s2s-kicad-plugin/releases/download/v0.1.1/s2s-kicad-plugin-0.1.1.zip",
+            "download_sha256": "68ecbd155af89e110345b077224e970d16888c42f2078f43166ea73ebbc7f0e7",
+            "download_size": 174463,
+            "install_size": 300606,
+            "platforms": [
+                "linux",
+                "macos",
+                "windows"
+            ]
+        }
+    ]
+}
