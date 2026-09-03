@@ -8,7 +8,8 @@ Produces ``dist/s2s-kicad-plugin-<version>.zip`` with the PCM layout:
     resources/icon.png     # 64x64 icon shown in the Content Manager
 
 and prints the ``download_sha256`` / ``download_size`` / ``install_size``
-you paste into the KiCad addon-metadata repository entry (see SUBMITTING.md).
+you paste into the KiCad addon-metadata repository entry (see
+../pcm-submission/README.md).
 
 Stdlib only. Run: ``python3 packaging/build_pcm.py``
 """

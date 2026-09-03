@@ -26,7 +26,7 @@ s2s_kicad/
 tests/             # client tests against a fake server
 packaging/
   build_pcm.py     # builds the KiCad PCM package (zip)
-  SUBMITTING.md    # how to publish to the KiCad Plugin & Content Manager
+pcm-submission/    # prepared, schema-validated KiCad PCM merge-request files
 metadata.json      # KiCad PCM manifest
 ```
 
@@ -45,7 +45,7 @@ network layer pure makes it unit-testable outside KiCad.
    then **Apply Pending Changes**.
 
 A one-click listing in KiCad's official repository is in progress — see
-[`packaging/SUBMITTING.md`](packaging/SUBMITTING.md).
+[`pcm-submission/README.md`](pcm-submission/README.md).
 
 ### Advanced: manual copy
 
